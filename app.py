@@ -29,7 +29,7 @@ st.session_state.all_options = all_meals
 
 
 
-get_meals()
+
 st.button("🧠 Generate Random Meals", on_click=uncached_get_meals)
 st.sidebar.title("Settings")
 st.session_state.n_meals_gen = st.sidebar.number_input(
@@ -49,6 +49,7 @@ selectiveness = st.sidebar.select_slider(
 
 mapper = {"None": -999, "Somewhat": 0, "Balanced": 0.1, "High": 0.2}
 st.session_state.selectiveness = mapper[selectiveness]
+get_meals()
 #uncached_get_meals()
 if "selected_meals" not in st.session_state:
     st.session_state.selected_meals = []
