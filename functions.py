@@ -10,7 +10,7 @@ def get_difficulty(df):
 
 def get_taste(df):
     sub_df = df.loc[df["meal"].isin(st.session_state.selected_meals)]
-    mean = ((sub_df["taste k"] + sub_df["taste n"]) / 2).mean()
+    mean = sub_df["taste"].mean()
     return mean
 
 
@@ -26,7 +26,7 @@ def get_meals_from_google_sheet():
     sheet_url = "https://docs.google.com/spreadsheets/d/1lMotcgwA_8VoE3kGmjjh8DOnrL97eGQxLt4h6dDf8d4/export?format=csv&gid=0"
     df = pd.read_csv(sheet_url)
     df["taste"] = (df["taste k"] + df["taste n"]) / 10
-    df["difficulty"] = df["difficulty"] / 3
+    df["difficulty"] = (df["difficulty"] - 1)/2
     meals = df["meal"].tolist()
     return df, meals
 
@@ -36,8 +36,9 @@ def uncached_get_meals():
         get_meals_from_google_sheet()
         st.session_state.all_options = st.session_state.all_options
 
-    efficiency = -999
-    while efficiency < 0.1:
+    efficiency = -1000
+    while efficiency < st.session_state.selectiveness:
+        print('running')
         meal_candidates = random.sample(
             st.session_state.all_options, st.session_state.n_meals_gen
         )
