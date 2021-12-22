@@ -54,7 +54,8 @@ get_meals()
 if "selected_meals" not in st.session_state:
     st.session_state.selected_meals = []
 
-
+if "current_options" not in st.session_state:
+    uncached_get_meals()
 with st.form(key="my_annotator"):
 
     set_multiselect_color()
