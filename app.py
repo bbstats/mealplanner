@@ -10,6 +10,7 @@ from functions import (
     get_meals_from_google_sheet,
     get_taste,
     uncached_get_meals,
+    uncached_get_meals_from_google_sheet
 
 )
 
@@ -23,7 +24,10 @@ st.set_page_config(
 )
 st.title("Meal Brainstormer")
 
-df, all_meals = get_meals_from_google_sheet()
+
+st.sidebar.title("Settings")
+reload = st.sidebar.button("🔄 Reload Meal Sheet")
+df, all_meals = get_meals_from_google_sheet(invalidator=reload)
 st.session_state.df = df
 st.session_state.all_options = all_meals
 
@@ -31,7 +35,8 @@ st.session_state.all_options = all_meals
 
 
 st.button("🧠 Generate Random Meals", on_click=uncached_get_meals)
-st.sidebar.title("Settings")
+
+
 st.session_state.n_meals_gen = st.sidebar.number_input(
     "Number of random meals to generate",
     min_value=1,
@@ -66,7 +71,7 @@ with st.form(key="my_annotator"):
     )
 
     accept_button = st.form_submit_button(label="✔️ Add to Brainstorm")
-    clear_button = st.form_submit_button(label="🔄 Clear Brainstorm")
+    clear_button = st.form_submit_button(label="🗑️ Clear Brainstorm")
 
     if accept_button:
         st.session_state.selected_meals += selections

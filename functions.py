@@ -22,7 +22,16 @@ def delete_all_selections():
 
 
 @st.cache
-def get_meals_from_google_sheet():
+def get_meals_from_google_sheet(invalidator=False):
+    sheet_url = "https://docs.google.com/spreadsheets/d/1lMotcgwA_8VoE3kGmjjh8DOnrL97eGQxLt4h6dDf8d4/export?format=csv&gid=0"
+    df = pd.read_csv(sheet_url)
+    df["taste"] = (df["taste k"] + df["taste n"]) / 10
+    df["difficulty"] = (df["difficulty"] - 1)/2
+    meals = df["meal"].tolist()
+    return df, meals
+
+
+def uncached_get_meals_from_google_sheet():
     sheet_url = "https://docs.google.com/spreadsheets/d/1lMotcgwA_8VoE3kGmjjh8DOnrL97eGQxLt4h6dDf8d4/export?format=csv&gid=0"
     df = pd.read_csv(sheet_url)
     df["taste"] = (df["taste k"] + df["taste n"]) / 10
